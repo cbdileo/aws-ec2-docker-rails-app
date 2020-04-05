@@ -1,0 +1,42 @@
+version: '3'
+
+# Defines disk volumns to be used by a container
+volumes:
+  postgres_data: {}
+
+# Define your docker containers
+services:
+  # Postgres database, since this is just a db server
+  # no need to define a docker file
+  db:
+    image: postgres:12
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+  # Rails application container
+  app:
+    env_file:
+      - ./docker/app/app.env
+    # Opens required ports between app and postgres container
+    depends_on:
+      - db
+    build:
+      context: .
+      # Point to our container docker file
+      dockerfile: ./docker/app/app.DockerFile
+    # Expose the following ports to the outside world
+    ports:
+      - 3000:3000
+  # Nginx server container
+  web:
+    build:
+      context: .
+      # Point to our container docker file
+      dockerfile: ./docker/web/web.DockerFile
+    # Opens required ports between app and web container
+    depends_on:
+      - app
+    # Expose the following ports to the outside world
+    ports:
+      - 80:80

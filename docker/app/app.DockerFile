@@ -29,8 +29,7 @@ RUN bundle install --jobs 20 --retry 5
 COPY . .
 
 # Precompile assets
-ENV RAILS_ENV=production
-RUN bundle exec rake assets:precompile
+RUN RAILS_ENV=production SECRET_KEY_BASE=`bundle exec rake secret` bundle exec rake assets:precompile
 
 # Expose port 3000 to the outside world
 EXPOSE 3000

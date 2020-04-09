@@ -21,11 +21,6 @@ git clone https://github.com/cbdileo/aws-ec2-docker-rails-app.git
 cd aws-ec2-docker-rails-app
 ```
 
-## Added secret key
-```
-vim docker/app/app.env
-```
-
 # Create Docker container and start them
 ```
 docker-compose build
